@@ -102,7 +102,7 @@ client.on("interactionCreate", async (interaction) => {
 
 		await interaction.reply({
 			content: "✅ Bug report submitted! Thank you!",
-			flags: MessageFlags.Ephemeral
+			ephemeral: true
 		}); // Reply to the interaction to acknowledge it
 
 		const channel = await client.channels.fetch(process.env.REPORT_CHANNEL_ID);
