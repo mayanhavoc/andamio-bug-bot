@@ -7,6 +7,7 @@ const {
 	SlashCommandBuilder,
 	InteractionType
 } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]
@@ -80,27 +81,32 @@ client.on("interactionCreate", async (interaction) => {
 	if (interaction.commandName === "bug") {
 		const title = interaction.options.getString("title");
 		const summary = interaction.options.getString("summary");
-		const url = interaction.options.getString("url") || "N/A";
+		const url = interaction.options.getString("url") || "No URL provided"; // Default to "No URL provided" if none is given
+		/**
+		 * Steps to reproduce and expected are required, so no need to check for them.
+		 * They will always be present if the command was executed correctly.
+		 */
 		const steps = interaction.options.getString("steps");
 		const expected = interaction.options.getString("expected");
 
-		const bugReport = `
-🐞 **New Bug Report:**
-
-**Title:** ${title}
-**Summary:** ${summary}
-**URL:** ${url}
-**Steps to Reproduce:** ${steps}
-**Expected Result:** ${expected}
-    `;
+		const bugEmbed = new EmbedBuilder()
+			.setTitle(`🐞 Bug: ${title}`)
+			.addFields(
+				{ name: "Summary", value: summary, inline: false },
+				{ name: "Steps to Reproduce", value: steps, inline: false },
+				{ name: "Expected Result", value: expected, inline: false },
+				{ name: "URL", value: url, inline: false }
+			)
+			.setColor(0xff0000)
+			.setTimestamp();
 
 		await interaction.reply({
 			content: "✅ Bug report submitted! Thank you!",
-			ephemeral: true
-		});
+			flags: MessageFlags.Ephemeral
+		}); // Reply to the interaction to acknowledge it
 
 		const channel = await client.channels.fetch(process.env.REPORT_CHANNEL_ID);
-		channel.send(bugReport);
+		channel.send({ embeds: [bugEmbed] });
 	}
 });
 
