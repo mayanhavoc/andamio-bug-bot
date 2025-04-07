@@ -92,19 +92,26 @@ client.on("interactionCreate", async (interaction) => {
 
 	// Create Discord Embed
 	const bugEmbed = new EmbedBuilder()
-		.setColor(0xff0000) // Bright red color for bug reports
+		.setColor(0xff0000)
 		.setTitle(`🐞 Bug Report: ${title}`)
-		// .setURL('https://your-bug-tracker.example.com') // (Optional) Add link to your bug tracker if you want
 		.setAuthor({
 			name: "Andamio Bug Bot",
 			iconURL:
-				"https://app.andamio.io/_next/image?url=%2Fandamio-logo-no-white-overflow.png", // (Optional) Company or Bot logo
-			url: "https://www.andamio.io" // (Optional) Link to your main site
+				"https://app.andamio.io/_next/image?url=%2Fandamio-logo-no-white-overflow.png",
+			url: "https://www.andamio.io"
 		})
 		.setDescription(`**Summary:**\n${summary}`)
 		.addFields(
-			{ name: "🔎 Steps to Reproduce", value: steps, inline: false },
-			{ name: "🎯 Expected Result", value: expected, inline: false },
+			{
+				name: "🔎 Steps to Reproduce",
+				value: steps || "No steps provided.",
+				inline: true
+			},
+			{
+				name: "🎯 Expected Result",
+				value: expected || "No expected result provided.",
+				inline: true
+			},
 			{
 				name: "🌐 Relevant URL",
 				value:
@@ -114,13 +121,12 @@ client.on("interactionCreate", async (interaction) => {
 				inline: false
 			}
 		)
-		// .setThumbnail('https://your-thumbnail-link.example.com/thumbnail.png') // (Optional) Small image in corner
 		.setFooter({
 			text: "Reported via Andamio Bug Bot",
 			iconURL:
-				"https://app.andamio.io/_next/image?url=%2Fandamio-logo-no-white-overflow.png" // (Optional) Small footer logo
+				"https://app.andamio.io/_next/image?url=%2Fandamio-logo-no-white-overflow.png"
 		})
-		.setTimestamp(); // Automatically adds timestamp of when bug was reported
+		.setTimestamp();
 
 	const channel = await client.channels.fetch(process.env.REPORT_CHANNEL_ID);
 	await channel.send({ embeds: [bugEmbed] });
