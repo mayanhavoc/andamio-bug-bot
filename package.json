@@ -1,0 +1,15 @@
+{
+  "name": "andamio-bug-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for structured bug reporting",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "mayanhavoc",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.0.0"
+  }
+}
