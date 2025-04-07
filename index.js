@@ -105,15 +105,6 @@ client.on("interactionCreate", async (interaction) => {
 			ephemeral: true
 		}); // Reply to the interaction to acknowledge it
 
-		try {
-			const channel = await client.channels.fetch(
-				process.env.REPORT_CHANNEL_ID
-			);
-			await channel.send({ embeds: [bugEmbed] });
-		} catch (error) {
-			console.error("Error sending bug report:", error);
-		}
-
 		const channel = await client.channels.fetch(process.env.REPORT_CHANNEL_ID);
 		channel.send({ embeds: [bugEmbed] });
 	}
