@@ -92,31 +92,27 @@ client.on("interactionCreate", async (interaction) => {
 
 	// Create Discord Embed
 	const bugEmbed = new EmbedBuilder()
-		.setTitle(`🐞 Bug: ${title}`)
-		.addFields(
-			{ name: "Summary", value: summary, inline: false },
-			{ name: "Steps to Reproduce", value: steps, inline: false },
-			{ name: "Expected Result", value: expected, inline: false },
-			{ name: "URL", value: url, inline: false }
-		)
-		.setColor(0xff0000)
-		.setTimestamp();
+  .setColor(0xff0000) // Bright red color for bug reports
+  .setTitle(`🐞 Bug Report: ${title}`)
+  // .setURL('https://your-bug-tracker.example.com') // (Optional) Add link to your bug tracker if you want
+  .setAuthor({ 
+    name: 'Andamio Bug Bot', 
+    iconURL: 'https://app.andamio.io/_next/image?url=%2Fandamio-logo-no-white-overflow.png', // (Optional) Company or Bot logo
+    url: 'https://www.andamio.io' // (Optional) Link to your main site
+  })
+  .setDescription(`**Summary:**\n${summary}`)
+  .addFields(
+    { name: '🔎 Steps to Reproduce', value: steps, inline: false },
+    { name: '🎯 Expected Result', value: expected, inline: false },
+    { name: '🌐 Relevant URL', value: url !== "No URL provided" ? `[Click Here](${url})` : 'No URL provided.', inline: false }
+  )
+  // .setThumbnail('https://your-thumbnail-link.example.com/thumbnail.png') // (Optional) Small image in corner
+  .setFooter({ 
+    text: 'Reported via Andamio Bug Bot', 
+    iconURL: 'https://app.andamio.io/_next/image?url=%2Fandamio-logo-no-white-overflow.png' // (Optional) Small footer logo
+  })
+  .setTimestamp(); // Automatically adds timestamp of when bug was reported
 
-	try {
-		await interaction.reply({
-			content: "✅ Bug report submitted! Thank you!",
-			ephemeral: true
-		});
-
-		const channel = await client.channels.fetch(process.env.REPORT_CHANNEL_ID);
-		await channel.send({ embeds: [bugEmbed] });
-
-		// Submit to Notion
-		await submitBugToNotion(title, summary, steps, expected, url);
-	} catch (error) {
-		console.error("❌ Error handling bug submission:", error);
-	}
-});
 
 // --- Submit Bug to Notion --- //
 async function submitBugToNotion(title, summary, steps, expected, url) {
