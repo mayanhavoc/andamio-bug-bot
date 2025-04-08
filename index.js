@@ -104,12 +104,12 @@ client.on("interactionCreate", async (interaction) => {
 		.addFields(
 			{
 				name: "🔎 Steps to Reproduce",
-				value: steps || "No steps provided.",
+				value: `**1.** ${steps.replace(/\n/g, "\n**•** ")}`,
 				inline: false
 			},
 			{
 				name: "🎯 Expected Result",
-				value: expected || "No expected result provided.",
+				value: expected,
 				inline: false
 			},
 			{
