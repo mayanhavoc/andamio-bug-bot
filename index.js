@@ -105,12 +105,12 @@ client.on("interactionCreate", async (interaction) => {
 			{
 				name: "🔎 Steps to Reproduce",
 				value: steps || "No steps provided.",
-				inline: true
+				inline: false
 			},
 			{
 				name: "🎯 Expected Result",
 				value: expected || "No expected result provided.",
-				inline: true
+				inline: false
 			},
 			{
 				name: "🌐 Relevant URL",
