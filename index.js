@@ -84,6 +84,12 @@ client.on("interactionCreate", async (interaction) => {
 	if (interaction.type !== InteractionType.ApplicationCommand) return;
 	if (interaction.commandName !== "bug") return;
 
+	// 👇 Acknowledge the interaction immediately
+	await interaction.reply({
+		content: "✅ Bug report received! Processing now...",
+		ephemeral: true // private response only visible to the user
+	});
+
 	const title = interaction.options.getString("title");
 	const summary = interaction.options.getString("summary");
 	const steps = interaction.options.getString("steps");
