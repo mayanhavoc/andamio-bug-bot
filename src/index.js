@@ -31,7 +31,7 @@ for (const file of commandFiles) {
 	const command = require(filePath);
 	if (command.data && command.execute) {
 		client.commands.set(command.data.name, command);
-		commandList.push(command.data.toJSON());
+		commands.push(command.data.toJSON());
 	} else {
 		logger.warn(`Skipping invalid command file: ${file}`);
 	}
