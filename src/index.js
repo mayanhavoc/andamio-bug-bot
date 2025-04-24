@@ -22,7 +22,7 @@ client.slashCommands = [];
 // Dynamically read command files
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs
-	.readirSync(commandsPath)
+	.readdirSync(commandsPath)
 	.filter((file) => file.endsWith(".js"));
 
 const commands = client.slashCommands;
