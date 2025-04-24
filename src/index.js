@@ -4,6 +4,7 @@ const {
 	GatewayIntentBits,
 	REST,
 	Routes,
+	Collection,
 	InteractionType
 } = require("discord.js");
 const fs = require("fs");
