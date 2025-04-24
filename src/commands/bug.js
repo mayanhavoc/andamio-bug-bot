@@ -38,7 +38,7 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.reply({
 			content: "✅ Bug report received! Processing now...",
-			ephemeral: true // private response only visible to the user
+			flags: 64
 		});
 		const title = interaction.options.getString("title");
 		const summary = interaction.options.getString("summary");
@@ -84,7 +84,7 @@ module.exports = {
 			})
 			.setTimestamp();
 
-		const channel = await client.channels.fetch(
+		const channel = await interaction.client.channels.fetch(
 			process.env.BUG_REPORT_CHANNEL_ID
 		);
 		await channel.send({ embeds: [bugEmbed] });

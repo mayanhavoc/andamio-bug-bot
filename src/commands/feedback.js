@@ -42,7 +42,7 @@ module.exports = {
 			await interaction.reply({
 				content:
 					"✅ Thank you for your feedback! It has been submitted successfully.",
-				ephemeral: true
+				flags: 64
 			});
 		} catch (error) {
 			console.error("❌ Error submitting feedback:", error);
