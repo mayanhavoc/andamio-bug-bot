@@ -21,39 +21,40 @@ module.exports = {
 			option
 				.setName("category")
 				.setDescription(
-					"Select a feedback category: UX/UI, Feature, Bug, Price, Other,"
+					"Select a feedback category: UX/UI, Feature, Bug, Price, Other"
 				)
 				.setRequired(true)
-		)
-		.addStringOption((option) =>
-			option
-				.setName("context")
-				.setDescription("Where or when did this feedback come up?")
-				.setRequired(false)
 		),
+
 	async execute(interaction) {
 		const title = interaction.options.getString("title");
 		const description = interaction.options.getString("description");
-		const context =
-			interaction.options.getString("context") || "No context provided";
 		const category = interaction.options.getString("category");
 
 		try {
-			await submitFeedbackToNotion(title, description, context, category);
+			await submitFeedbackToNotion({
+				feedback: title,
+				improvement: description,
+				category,
+				source: "Discord"
+			});
+
 			await interaction.reply({
 				content:
-					"Thank you for your feedback! It has been submitted successfully.",
+					"✅ Thank you for your feedback! It has been submitted successfully.",
 				ephemeral: true
 			});
 		} catch (error) {
-			console.error("Error submitting feedback:", error);
+			console.error("❌ Error submitting feedback:", error);
 			await interaction.reply({
 				content:
-					"There was an error submitting your feedback. Please try again later.",
+					"❌ There was an error submitting your feedback. Please try again later.",
 				ephemeral: true
 			});
+			return; // Don't try to send embed if the database call failed
 		}
-		const feedbackEmbed = newEmbedBuilder()
+
+		const feedbackEmbed = new EmbedBuilder()
 			.setColor(0x00b0f4)
 			.setTitle(`💡 Feedback: ${title}`)
 			.addFields(
@@ -67,17 +68,13 @@ module.exports = {
 			})
 			.setTimestamp();
 
-		const channel = await interaction.client.channels.fetch(
-			process.env.FEEDBACK_REPORT_CHANNEL_ID
-		);
-		channel.send({ embeds: [feedbackEmbed] }).catch(console.error);
-
-		await submitFeedbackToNotion({
-			feedback: title,
-			improvement: description,
-			context,
-			category,
-			source: "Discord"
-		});
+		try {
+			const channel = await interaction.client.channels.fetch(
+				process.env.FEEDBACK_REPORT_CHANNEL_ID
+			);
+			await channel.send({ embeds: [feedbackEmbed] });
+		} catch (error) {
+			console.error("⚠️ Failed to send feedback embed to channel:", error);
+		}
 	}
 };

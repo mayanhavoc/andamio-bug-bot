@@ -2,7 +2,16 @@ const { Client: NotionClient } = require("@notionhq/client");
 
 const notion = new NotionClient({ auth: process.env.NOTION_API_KEY });
 
-// Define your functions below
+function determinedePriority(title) {
+	const lowerTitle = title.toLowerCase();
+	if (lowerTitle.includes("critical") || lowerTitle.includes("urgent")) {
+		return "High";
+	} else if (lowerTitle.includes("minor") || lowerTitle.includes("low")) {
+		return "Low";
+	}
+	return "Normal";
+}
+
 async function submitBugToNotion(title, summary, steps, expected, url) {
 	try {
 		const priority = determinedePriority(title);
@@ -14,36 +23,28 @@ async function submitBugToNotion(title, summary, steps, expected, url) {
 				Title: {
 					title: [
 						{
-							text: {
-								content: title
-							}
+							text: { content: title || "Untitled bug" }
 						}
 					]
 				},
 				Summary: {
 					rich_text: [
 						{
-							text: {
-								content: summary
-							}
+							text: { content: summary || "No summary provided" }
 						}
 					]
 				},
 				Steps: {
 					rich_text: [
 						{
-							text: {
-								content: steps
-							}
+							text: { content: steps || "No steps provided" }
 						}
 					]
 				},
 				Expected: {
 					rich_text: [
 						{
-							text: {
-								content: expected
-							}
+							text: { content: expected || "No expected result provided" }
 						}
 					]
 				},
@@ -51,16 +52,14 @@ async function submitBugToNotion(title, summary, steps, expected, url) {
 					url: url || "https://example.com"
 				},
 				Priority: {
-					select: {
-						name: priority
-					}
+					select: { name: priority }
 				}
 			}
 		});
-		console.log("Bug submitted to Notion successfully.");
+		console.log("✅ Bug submitted to Notion successfully.");
 	} catch (error) {
 		console.error(
-			"Error submitting bug to Notion:",
+			"❌ Error submitting bug to Notion:",
 			error.body || error.message
 		);
 		throw new Error("Failed to submit bug to Notion");
@@ -70,7 +69,6 @@ async function submitBugToNotion(title, summary, steps, expected, url) {
 async function submitFeedbackToNotion({
 	feedback,
 	improvement,
-	context,
 	category,
 	source
 }) {
@@ -83,18 +81,14 @@ async function submitFeedbackToNotion({
 				Feedback: {
 					title: [
 						{
-							text: {
-								content: feedback
-							}
+							text: { content: feedback || "No feedback provided" }
 						}
 					]
 				},
 				"How can we improve": {
 					rich_text: [
 						{
-							text: {
-								content: improvement
-							}
+							text: { content: improvement || "No suggestions provided" }
 						}
 					]
 				},
@@ -102,35 +96,23 @@ async function submitFeedbackToNotion({
 					select: { name: source || "Discord" }
 				},
 				Categories: {
-					multi_select: {
-						name: category
-					}
+					multi_select: category ? [{ name: category }] : [{ name: "Other" }]
 				},
-				"Submision time": {
+				"Submission time": {
 					date: {
 						start: new Date().toISOString()
 					}
 				}
 			}
 		});
-		console.log("Feedback submitted to Notion successfully.");
+		console.log("✅ Feedback submitted to Notion successfully.");
 	} catch (error) {
 		console.error(
-			"Error submitting feedback to Notion:",
+			"❌ Error submitting feedback to Notion:",
 			error.body || error.message
 		);
 		throw new Error("Failed to submit feedback to Notion");
 	}
-}
-function determinedePriority(title) {
-	// Simple heuristic to determine priority based on title keywords
-	const lowerTitle = title.toLowerCase();
-	if (lowerTitle.includes("critical") || lowerTitle.includes("urgent")) {
-		return "High";
-	} else if (lowerTitle.includes("minor") || lowerTitle.includes("low")) {
-		return "Low";
-	}
-	return "Normal"; // Default priority
 }
 
 module.exports = {
