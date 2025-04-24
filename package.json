@@ -4,7 +4,7 @@
 	"description": "Discord bot for structured bug reporting",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js"
+		"start": "node src/index.js"
 	},
 	"author": "mayanhavoc",
 	"license": "MIT",
