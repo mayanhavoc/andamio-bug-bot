@@ -19,17 +19,17 @@ module.exports = {
 		)
 		.addStringOption((option) =>
 			option
-				.setName("context")
-				.setDescription("Where or when did this feedback come up?")
-				.setRequired(false)
-		)
-		.addStringOption((option) =>
-			option
 				.setName("category")
 				.setDescription(
 					"Select a feedback category: UX/UI, Feature, Bug, Price, Other,"
 				)
 				.setRequired(true)
+		)
+		.addStringOption((option) =>
+			option
+				.setName("context")
+				.setDescription("Where or when did this feedback come up?")
+				.setRequired(false)
 		),
 	async execute(interaction) {
 		const title = interaction.options.getString("title");
