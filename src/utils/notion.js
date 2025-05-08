@@ -118,3 +118,9 @@ async function submitFeedbackToNotion({
 		throw new Error("Failed to submit feedback to Notion");
 	}
 }
+
+module.exports = {
+	submitBugToNotion,
+	submitFeedbackToNotion
+};
+// This module provides functions to submit bugs and feedback to Notion databases.
