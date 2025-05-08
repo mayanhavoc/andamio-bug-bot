@@ -53,7 +53,14 @@ async function submitBugToNotion(title, summary, steps, expected, url) {
 				},
 				Priority: {
 					select: { name: priority }
-				}
+				},
+				"Submitted by": {
+					rich_text: [
+						{
+							text: { content: reporter }
+						}
+					]
+				},
 			}
 		});
 		console.log("✅ Bug submitted to Notion successfully.");
@@ -72,6 +79,7 @@ async function submitFeedbackToNotion({
 	category,
 	nps,
 	source
+	reporter
 }) {
 	try {
 		await notion.pages.create({

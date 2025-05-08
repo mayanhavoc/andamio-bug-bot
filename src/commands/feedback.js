@@ -1,6 +1,9 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { submitFeedbackToNotion } = require("../utils/notion");
 
+const reporter = `${interaction.user.username}#${interaction.user.discriminator}`;
+const reporterId = interaction.user.id;
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("feedback")
@@ -54,7 +57,9 @@ module.exports = {
 				improvement,
 				category,
 				nps,
-				source: "Discord"
+				source: "Discord",
+				reporter,
+				reporterId
 			});
 
 			await interaction.reply({

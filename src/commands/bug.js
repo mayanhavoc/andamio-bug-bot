@@ -1,6 +1,9 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { submitBugToNotion } = require("../utils/notion");
 
+const reporter = `${interaction.user.username}#${interaction.user.discriminator}`;
+const reporterId = interaction.user.id;
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("bug")
@@ -89,6 +92,14 @@ module.exports = {
 		);
 		await channel.send({ embeds: [bugEmbed] });
 
-		await submitBugToNotion(title, summary, steps, expected, url);
+		await submitBugToNotion(
+			title,
+			summary,
+			steps,
+			expected,
+			url,
+			reporter,
+			reporterId
+		);
 	}
 };
