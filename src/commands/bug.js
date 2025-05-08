@@ -37,7 +37,6 @@ module.exports = {
 		),
 	async execute(interaction) {
 		const reporter = `${interaction.user.username}#${interaction.user.discriminator}`;
-		const reporterId = interaction.user.id;
 		await interaction.reply({
 			content: "✅ Bug report received! Processing now...",
 			flags: 64
