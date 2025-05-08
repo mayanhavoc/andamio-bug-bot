@@ -94,7 +94,7 @@ async function submitFeedbackToNotion({
 					]
 				},
 				Categories: {
-					select: { name: category }
+					multi_select: [{ name: category }]
 				},
 				NPS: {
 					number: nps
