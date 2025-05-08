@@ -1,9 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { submitFeedbackToNotion } = require("../utils/notion");
 
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { submitFeedbackToNotion } = require("../utils/notion");
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("feedback")
