@@ -12,7 +12,14 @@ function determinedePriority(title) {
 	return "Normal";
 }
 
-async function submitBugToNotion(title, summary, steps, expected, url) {
+async function submitBugToNotion(
+	title,
+	summary,
+	steps,
+	expected,
+	url,
+	reporter
+) {
 	try {
 		const priority = determinedePriority(title);
 		await notion.pages.create({
@@ -60,7 +67,7 @@ async function submitBugToNotion(title, summary, steps, expected, url) {
 							text: { content: reporter }
 						}
 					]
-				},
+				}
 			}
 		});
 		console.log("✅ Bug submitted to Notion successfully.");
@@ -78,7 +85,7 @@ async function submitFeedbackToNotion({
 	improvement,
 	category,
 	nps,
-	source
+	source,
 	reporter
 }) {
 	try {
@@ -114,6 +121,13 @@ async function submitFeedbackToNotion({
 					date: {
 						start: new Date().toISOString()
 					}
+				},
+				"Submitted by": {
+					rich_text: [
+						{
+							text: { content: reporter }
+						}
+					]
 				}
 			}
 		});
