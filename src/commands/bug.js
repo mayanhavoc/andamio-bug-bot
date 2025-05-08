@@ -1,9 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { submitBugToNotion } = require("../utils/notion");
 
-const reporter = `${interaction.user.username}#${interaction.user.discriminator}`;
-const reporterId = interaction.user.id;
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("bug")
@@ -39,6 +36,8 @@ module.exports = {
 				.setRequired(false)
 		),
 	async execute(interaction) {
+		const reporter = `${interaction.user.username}#${interaction.user.discriminator}`;
+		const reporterId = interaction.user.id;
 		await interaction.reply({
 			content: "✅ Bug report received! Processing now...",
 			flags: 64

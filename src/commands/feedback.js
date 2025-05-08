@@ -45,6 +45,8 @@ module.exports = {
 				.setRequired(false)
 		),
 	async execute(interaction) {
+		const reporter = `${interaction.user.username}#${interaction.user.discriminator}`;
+		const reporterId = interaction.user.id;
 		const feedback = interaction.options.getString("feedback");
 		const improvement =
 			interaction.options.getString("improvement") || "No suggestions provided";
