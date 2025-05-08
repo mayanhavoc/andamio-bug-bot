@@ -56,8 +56,7 @@ module.exports = {
 				category,
 				nps,
 				source: "Discord",
-				reporter,
-				reporterId
+				reporter
 			});
 
 			await interaction.reply({
