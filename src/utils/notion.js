@@ -93,7 +93,7 @@ async function submitFeedbackToNotion({
 						}
 					]
 				},
-				Category: {
+				Categories: {
 					select: { name: category }
 				},
 				NPS: {
