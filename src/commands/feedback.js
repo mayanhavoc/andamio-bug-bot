@@ -1,80 +1,75 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { submitFeedbackToNotion } = require("../utils/notion");
 
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { submitFeedbackToNotion } = require("../utils/notion");
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("feedback")
 		.setDescription("Share feedback or suggestions about the platform")
 		.addStringOption((option) =>
 			option
-				.setName("title")
+				.setName("feedback")
 				.setDescription("Short headline or topic of your feedback")
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
 			option
-				.setName("description")
-				.setDescription("Describe your idea, suggestion or issue")
-				.setRequired(true)
+				.setName("improvement")
+				.setDescription("How could we improve your experience?")
+				.setRequired(false)
+		)
+		.addIntegerOption((option) =>
+			option
+				.setName("nps")
+				.setDescription(
+					"On a scale of 1-10, how likely are you to recommend us?"
+				)
+				.setMinValue(0)
+				.setMaxValue(10)
+				.setRequired(false)
 		)
 		.addStringOption((option) =>
 			option
 				.setName("category")
-				.setDescription(
-					"Select a feedback category: UX/UI, Feature, Bug, Price, Other"
+				.setDescription("What kind of feedback is this?")
+				.addChoices(
+					{ name: "UI/UX", value: "UI/UX" },
+					{ name: "Bug", value: "Bug" },
+					{ name: "Feature", value: "Feature" },
+					{ name: "Price", value: "Price" },
+					{ name: "Customer Support", value: "Customer Support" },
+					{ name: "Other", value: "Other" }
 				)
-				.setRequired(true)
+				.setRequired(false)
 		),
-
 	async execute(interaction) {
-		const title = interaction.options.getString("title");
-		const description = interaction.options.getString("description");
-		const category = interaction.options.getString("category");
+		const feedback = interaction.options.getString("feedback");
+		const improvement =
+			interaction.options.getString("improvement") || "No suggestions provided";
+		const category = interaction.options.getString("category") || "Other";
+		const nps = interaction.options.getInteger("nps") ?? null;
 
 		try {
 			await submitFeedbackToNotion({
-				feedback: title,
-				improvement: description,
+				feedback,
+				improvement,
 				category,
+				nps,
 				source: "Discord"
 			});
 
 			await interaction.reply({
-				content:
-					"✅ Thank you for your feedback! It has been submitted successfully.",
+				content: "✅ Thanks for your feedback!",
+				flags: 64 // ephemeral response
+			});
+		} catch (error) {
+			console.error("Error submitting feedback:", error);
+			await interaction.reply({
+				content: "❌ There was a problem submitting your feedback.",
 				flags: 64
 			});
-		} catch (error) {
-			console.error("❌ Error submitting feedback:", error);
-			await interaction.reply({
-				content:
-					"❌ There was an error submitting your feedback. Please try again later.",
-				ephemeral: true
-			});
-			return; // Don't try to send embed if the database call failed
-		}
-
-		const feedbackEmbed = new EmbedBuilder()
-			.setColor(0x00b0f4)
-			.setTitle(`💡 Feedback: ${title}`)
-			.addFields(
-				{ name: "📝 Description", value: description, inline: false },
-				{ name: "📍 Context", value: context, inline: false },
-				{ name: "🏷️ Category", value: category, inline: false }
-			)
-			.setFooter({
-				text: `Submitted by ${interaction.user.tag}`,
-				iconURL: interaction.user.displayAvatarURL()
-			})
-			.setTimestamp();
-
-		try {
-			const channel = await interaction.client.channels.fetch(
-				process.env.FEEDBACK_REPORT_CHANNEL_ID
-			);
-			await channel.send({ embeds: [feedbackEmbed] });
-		} catch (error) {
-			console.error("⚠️ Failed to send feedback embed to channel:", error);
 		}
 	}
 };
