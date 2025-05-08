@@ -90,14 +90,6 @@ module.exports = {
 		);
 		await channel.send({ embeds: [bugEmbed] });
 
-		await submitBugToNotion(
-			title,
-			summary,
-			steps,
-			expected,
-			url,
-			reporter,
-			reporterId
-		);
+		await submitBugToNotion(title, summary, steps, expected, url, reporter);
 	}
 };

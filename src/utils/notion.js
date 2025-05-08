@@ -22,6 +22,7 @@ async function submitBugToNotion(
 ) {
 	try {
 		const priority = determinedePriority(title);
+		console.log("Reporter:", reporter);
 		await notion.pages.create({
 			parent: {
 				database_id: process.env.NOTION_BUG_DATABASE_ID
@@ -89,6 +90,7 @@ async function submitFeedbackToNotion({
 	reporter
 }) {
 	try {
+		console.log("Reporter:", reporter);
 		await notion.pages.create({
 			parent: {
 				database_id: process.env.NOTION_FEEDBACK_DATABASE_ID
