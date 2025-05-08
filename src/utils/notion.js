@@ -70,6 +70,7 @@ async function submitFeedbackToNotion({
 	feedback,
 	improvement,
 	category,
+	nps,
 	source
 }) {
 	try {
@@ -81,22 +82,25 @@ async function submitFeedbackToNotion({
 				Feedback: {
 					title: [
 						{
-							text: { content: feedback || "No feedback provided" }
+							text: { content: feedback }
 						}
 					]
 				},
-				"How can we improve": {
+				"How can we improve your experience?": {
 					rich_text: [
 						{
-							text: { content: improvement || "No suggestions provided" }
+							text: { content: improvement }
 						}
 					]
+				},
+				Category: {
+					select: { name: category }
+				},
+				NPS: {
+					number: nps
 				},
 				Source: {
 					select: { name: source || "Discord" }
-				},
-				Categories: {
-					multi_select: category ? [{ name: category }] : [{ name: "Other" }]
 				},
 				"Submission time": {
 					date: {
@@ -114,8 +118,3 @@ async function submitFeedbackToNotion({
 		throw new Error("Failed to submit feedback to Notion");
 	}
 }
-
-module.exports = {
-	submitBugToNotion,
-	submitFeedbackToNotion
-};
